@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>clicker gaem.</title>
+    <link rel="icon" type="image/png" href="moneygame_logo.png">
+    <style>
+        body { background-color: #ff0000; font-family: Arial; text-align: center; margin-top: 50px; }
+        #score { font-size: 2em; margin-bottom: 20px; }
+        #clickBtn { font-size: 1.5em; padding: 20px 40px; cursor: pointer; }
+        #shopButtons { position:absolute; right:50px; top:100px; display:none; }
+        #rebirthBtn { background:black; color:rgb(255, 255, 255); font-size:1.2em; padding:10px 30px; margin:10px; }
+        #homeScreen {
+            position:fixed;
+            top:0; left:0; width:100vw; height:100vh;
+            background:#74d8ff;
+            display:flex; flex-direction:column; align-items:center; justify-content:center;
+            z-index:1000;
+        }
+        #playBtn {
+            font-size:1.5em;
+            padding:20px 40px;
+            margin-top:30px;
+            background:black;
+            color:white;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Home Screen -->
+    <div id="homeScreen">
+        <h1 style="font-size:3em; color:rgb(0, 0, 0); margin-bottom:10px;">clicker gaem.</h1>
+        <button id="playBtn">plaey</button>
+    </div>
+
+    <h1><small>this is cool gaem click buton foer moneh</small></h1>
+    <div id="score">moolah: 0</div>
+    <button id="clickBtn" style="color:#000000">click me for MONEY🤑</button>
+    <button id="shopBtn">buy cool stuff</button>
+    <button id="secretBtn" style="position:fixed; bottom:10px; right:10px;"> </button>
+    
+    <script>
+        // Home screen logic
+        const homeScreen = document.getElementById('homeScreen');
+        const playBtn = document.getElementById('playBtn');
+        playBtn.addEventListener('click', () => {
+            homeScreen.style.display = 'none';
+        });
+
+        let secretUsed = localStorage.getItem('secretUsed');
+        const secretBtn = document.getElementById('secretBtn');
+        if (secretUsed === 'true') {
+            secretBtn.style.display = 'none';
+        }
+        secretBtn.addEventListener('click', function() {
+            if (!secretUsed) {
+                score += 1000;
+                scoreDisplay.textContent = 'moolah: ' + score;
+                saveData();
+                alert('wow you found me');
+                secretBtn.style.display = 'none';
+                localStorage.setItem('secretUsed', 'true');
+                secretUsed = 'true';
+            }
+        });
+    </script>
+
+    <div id="clock" style="position:fixed; bottom:10px; left:10px; font-size:1.2em; color:white; background:rgba(0,0,0,0.5); padding:8px 16px; border-radius:8px; border:2px solid white; cursor:pointer;"></div>
+    <div id="giantClockOverlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.85); z-index:2000; align-items:center; justify-content:center;">
+        <div style="position:relative; width:100vw; height:100vh; display:flex; align-items:center; justify-content:center;">
+            <div id="giantClock" style="font-size:8em; color:white; background:rgba(0,0,0,0.7); padding:40px 80px; border-radius:32px; border:4px solid white; box-shadow:0 0 40px #fff;">
+            </div>
+            <button id="closeGiantClock" style="position:absolute; top:40px; right:60px; font-size:2em; background:red; color:white; border:none; border-radius:50%; width:60px; height:60px; cursor:pointer;">✕</button>
+        </div>
+    </div>
+
+    <script>
+        function formatClock(now) {
+            let hours = now.getHours();
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+            let seconds = now.getSeconds().toString().padStart(2, '0');
+            let ms = now.getMilliseconds().toString().padStart(3, '0');
+            let period = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            return `${hours}:${minutes}:${seconds}.${ms} ${period}`;
+        }
+
+        function updateClock() {
+            const clock = document.getElementById('clock');
+            const now = new Date();
+            clock.textContent = formatClock(now);
+
+            // If giant clock is visible, update it too
+            const giantClock = document.getElementById('giantClock');
+            const overlay = document.getElementById('giantClockOverlay');
+            if (overlay.style.display === 'flex') {
+                giantClock.textContent = formatClock(now);
+            }
+        }
+        setInterval(updateClock, 50);
+        updateClock();
+
+        // Giant clock logic
+        const clockDiv = document.getElementById('clock');
+        const giantClockOverlay = document.getElementById('giantClockOverlay');
+        const closeGiantClock = document.getElementById('closeGiantClock');
+
+        clockDiv.addEventListener('click', () => {
+            giantClockOverlay.style.display = 'flex';
+        });
+
+        closeGiantClock.addEventListener('click', () => {
+            giantClockOverlay.style.display = 'none';
+        });
+    </script>
+
+    <audio id="bgMusic" src="music.mp3" loop autoplay></audio>
+    <script>
+        // Optional: Unmute audio on user interaction (for browsers that block autoplay)
+        document.body.addEventListener('click', function() {
+            const bgMusic = document.getElementById('bgMusic');
+            if (bgMusic.paused) {
+                bgMusic.play();
+            }
+        }, { once: true });
+    </script>
+
+    <div id="shopButtons" style="display:none; position:absolute; right:50px; top:100px; flex-direction:column;">
+        <button id="item1Btn" style="display:block; margin-bottom:8px;">1 CPS (10$)</button>
+        <button id="item2Btn" style="display:block; margin-bottom:8px;">5 CPS (50$)</button>
+        <button id="item3Btn" style="display:block; margin-bottom:8px;">10 CPS (100$)</button>
+        <button id="item4Btn" style="display:block; margin-bottom:8px;">50 CPS (500$)</button>
+        <button id="item5Btn" style="display:block; margin-bottom:8px;">100 CPS (1000$)</button>
+        <button id="rebirthBtn" style="display:block;">rebirth</button>
+    </div>
+
+    <script>
+        let score = 0;
+        let cps = 0;
+        let cpsInterval = null;
+
+        // Load saved data
+        function loadData() {
+            const savedScore = localStorage.getItem('score');
+            const savedCps = localStorage.getItem('cps');
+            score = savedScore ? parseInt(savedScore) : 0;
+            cps = savedCps ? parseInt(savedCps) : 0;
+        }
+
+        // Save data
+        function saveData() {
+            localStorage.setItem('score', score);
+            localStorage.setItem('cps', cps);
+        }
+
+        const scoreDisplay = document.getElementById('score');
+        const clickBtn = document.getElementById('clickBtn');
+        const shopBtn = document.getElementById('shopBtn');
+        const shopButtons = document.getElementById('shopButtons');
+        const item1Btn = document.getElementById('item1Btn');
+        const item2Btn = document.getElementById('item2Btn');
+        const item3Btn = document.getElementById('item3Btn');
+        const item4Btn = document.getElementById('item4Btn');
+        const item5Btn = document.getElementById('item5Btn');
+        const rebirthBtn = document.getElementById('rebirthBtn');
+
+        function updateCPS() {
+            if (cpsInterval) clearInterval(cpsInterval);
+            if (cps > 0) {
+                cpsInterval = setInterval(() => {
+                    score += cps;
+                    scoreDisplay.textContent = 'moolah: ' + score;
+                    saveData();
+                }, 1000);
+            }
+        }
+
+        shopBtn.addEventListener('click', () => {
+            shopButtons.style.display = shopButtons.style.display === 'none' ? 'block' : 'none';
+        });
+
+        item1Btn.addEventListener('click', () => {
+            if (score >= 10) {
+                score -= 10;
+                cps += 1;
+                updateCPS();
+                scoreDisplay.textContent = 'moolah: ' + score;
+                saveData();
+            }
+        });
+
+        item2Btn.addEventListener('click', () => {
+            if (score >= 50) {
+                score -= 50;
+                cps += 5;
+                updateCPS();
+                scoreDisplay.textContent = 'moolah: ' + score;
+                saveData();
+            }
+        });
+
+        item3Btn.addEventListener('click', () => {
+            if (score >= 100) {
+                score -= 100;
+                cps += 10;
+                updateCPS();
+                scoreDisplay.textContent = 'moolah: ' + score;
+                saveData();
+            }
+        });
+
+        item4Btn.addEventListener('click', () => {
+            if (score >= 500) {
+                score -= 500;
+                cps += 50;
+                updateCPS();
+                scoreDisplay.textContent = 'moolah: ' + score;
+                saveData();
+            }
+        });
+
+        item5Btn.addEventListener('click', () => {
+            if (score >= 1000) {
+                score -= 1000;
+                cps += 100;
+                updateCPS();
+                scoreDisplay.textContent = 'moolah: ' + score;
+                saveData();
+            }
+        });
+
+        rebirthBtn.addEventListener('click', () => {
+            score = 0;
+            cps = 0;
+            scoreDisplay.textContent = 'moolah: ' + score;
+            updateCPS();
+            saveData();
+        });
+
+        clickBtn.addEventListener('click', () => {
+            score++;
+            scoreDisplay.textContent = 'moolah: ' + score;
+            saveData();
+        });
+
+        // Initialize game state
+        loadData();
+        scoreDisplay.textContent = 'moolah: ' + score;
+        updateCPS();
+    </script>
+</body>
+</html>
