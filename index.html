@@ -34,30 +34,7 @@
             z-index: 5;
         }
     </style>
-    <audio id="clickSound" src="thetrack.mp3"></audio>
-    <script>
-        const clickSound = document.getElementById('clickSound');
-        document.body.addEventListener('click', function() {
-            clickSound.play();
-        });
-    </script>
-<script>
-    // Random dark background color (never fully black)
-    function getRandomDarkColor() {
-        const r = Math.floor(Math.random() * 50) + 50; // 50–100
-        const g = Math.floor(Math.random() * 50) + 50; // 50–100
-        const b = Math.floor(Math.random() * 50) + 50; // 50–100
-        return `rgb(${r}, ${g}, ${b})`;
-    }
-
-    setInterval(() => {
-        document.body.style.backgroundColor = getRandomDarkColor();
-    }, 1000);
-</script>
-
-</body>
-</html>
-
+    <meta name="google-site-verification" content="o_gfi0Kziy-Y0fIa_wJ_dF0iE0l9rmRLTCARMkHzMvk" />
 </head>
 <body>
     <!-- Home Screen -->
@@ -70,6 +47,7 @@
     <div id="score">clicks: 0</div>
     <button id="clickBtn" style="color:black;">click for clicks</button>
     <button id="shopBtn" style="position:relative; z-index:20; color: rgb(0, 0, 0); background-color: gold;">shop</button>
+
     <button id="secretBtn" style="position:fixed; bottom:10px; right:10px; z-index:20;"> </button>
     
     <!-- Highest Score Display -->
@@ -77,28 +55,16 @@
         Highest score: 0
     </div>
 
+    <!-- Background music -->
+    <audio id="bgMusic" src="thetrack.mp3" loop></audio>
     <script>
-        const homeScreen = document.getElementById('homeScreen');
-        const playBtn = document.getElementById('playBtn');
-        playBtn.addEventListener('click', () => {
-            homeScreen.style.display = 'none';
-        });
+        const bgMusic = document.getElementById('bgMusic');
+        let musicStarted = false;
 
-        let secretUsed = localStorage.getItem('secretUsed');
-        const secretBtn = document.getElementById('secretBtn');
-        if (secretUsed === 'true') {
-            secretBtn.style.display = 'none';
-        }
-        secretBtn.addEventListener('click', function() {
-            if (!secretUsed) {
-                score += 1000;
-                scoreDisplay.textContent = 'clicks: ' + score;
-                checkHighestScore();
-                saveData();
-                alert('wow you found me');
-                secretBtn.style.display = 'none';
-                localStorage.setItem('secretUsed', 'true');
-                secretUsed = 'true';
+        document.body.addEventListener('click', () => {
+            if (!musicStarted) {
+                bgMusic.play();
+                musicStarted = true;
             }
         });
     </script>
@@ -106,59 +72,10 @@
     <div id="clock" style="position:fixed; bottom:10px; left:10px; font-size:1.2em; color:white; background:rgba(0,0,0,0.5); padding:8px 16px; border-radius:8px; border:2px solid white; cursor:pointer; z-index:20;"></div>
     <div id="giantClockOverlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.85); z-index:2000; align-items:center; justify-content:center;">
         <div style="position:relative; width:100vw; height:100vh; display:flex; align-items:center; justify-content:center;">
-            <div id="giantClock" style="font-size:8em; color:white; background:rgba(0,0,0,0.7); padding:40px 80px; border-radius:32px; border:4px solid white; box-shadow:0 0 40px #fff;">
-            </div>
+            <div id="giantClock" style="font-size:8em; color:white; background:rgba(0,0,0,0.7); padding:40px 80px; border-radius:32px; border:4px solid white; box-shadow:0 0 40px #fff;"></div>
             <button id="closeGiantClock" style="position:absolute; top:40px; right:60px; font-size:2em; background:red; color:white; border:none; border-radius:50%; width:60px; height:60px; cursor:pointer;">✕</button>
         </div>
     </div>
-
-    <script>
-        function formatClock(now) {
-            let hours = now.getHours();
-            let minutes = now.getMinutes().toString().padStart(2, '0');
-            let seconds = now.getSeconds().toString().padStart(2, '0');
-            let ms = now.getMilliseconds().toString().padStart(3, '0');
-            let period = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12 || 12;
-            return `${hours}:${minutes}:${seconds}.${ms} ${period}`;
-        }
-
-        function updateClock() {
-            const clock = document.getElementById('clock');
-            const now = new Date();
-            clock.textContent = formatClock(now);
-
-            const giantClock = document.getElementById('giantClock');
-            const overlay = document.getElementById('giantClockOverlay');
-            if (overlay.style.display === 'flex') {
-                giantClock.textContent = formatClock(now);
-            }
-        }
-        setInterval(updateClock, 50);
-        updateClock();
-
-        const clockDiv = document.getElementById('clock');
-        const giantClockOverlay = document.getElementById('giantClockOverlay');
-        const closeGiantClock = document.getElementById('closeGiantClock');
-
-        clockDiv.addEventListener('click', () => {
-            giantClockOverlay.style.display = 'flex';
-        });
-
-        closeGiantClock.addEventListener('click', () => {
-            giantClockOverlay.style.display = 'none';
-        });
-    </script>
-
-    <audio id="bgMusic" src="thetrack.mp3" loop autoplay></audio>
-    <script>
-        document.body.addEventListener('click', function() {
-            const bgMusic = document.getElementById('bgMusic');
-            if (bgMusic.paused) {
-                bgMusic.play();
-            }
-        }, { once: true });
-    </script>
 
     <div id="shopButtons" style="display:none; position:absolute; right:50px; top:100px; flex-direction:column; z-index:20;">
         <button id="item1Btn" style="display:block; margin-bottom:8px;">1 CPS (10 clicks)</button>
@@ -170,11 +87,19 @@
     </div>
 
     <script>
+        const homeScreen = document.getElementById('homeScreen');
+        const playBtn = document.getElementById('playBtn');
+        playBtn.addEventListener('click', () => {
+            homeScreen.style.display = 'none';
+        });
+
+        // Game variables
         let score = 0;
         let cps = 0;
         let cpsInterval = null;
         let highestScore = 0;
 
+        // Load/save
         function loadData() {
             const savedScore = localStorage.getItem('score');
             const savedCps = localStorage.getItem('cps');
@@ -246,14 +171,52 @@
         scoreDisplay.textContent = 'clicks: ' + score;
         updateCPS();
 
+        // Random button color
         function getRandomColor() { return "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0'); }
         setInterval(() => { clickBtn.style.backgroundColor = getRandomColor(); clickBtn.style.color = "white"; }, 1000);
+
+        // Clock
+        function formatClock(now) {
+            let hours = now.getHours();
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+            let seconds = now.getSeconds().toString().padStart(2, '0');
+            let ms = now.getMilliseconds().toString().padStart(3, '0');
+            let period = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            return `${hours}:${minutes}:${seconds}.${ms} ${period}`;
+        }
+
+        function updateClock() {
+            const clock = document.getElementById('clock');
+            const now = new Date();
+            clock.textContent = formatClock(now);
+
+            const giantClock = document.getElementById('giantClock');
+            const overlay = document.getElementById('giantClockOverlay');
+            if (overlay.style.display === 'flex') {
+                giantClock.textContent = formatClock(now);
+            }
+        }
+        setInterval(updateClock, 50);
+        updateClock();
+
+        const clockDiv = document.getElementById('clock');
+        const giantClockOverlay = document.getElementById('giantClockOverlay');
+        const closeGiantClock = document.getElementById('closeGiantClock');
+
+        clockDiv.addEventListener('click', () => {
+            giantClockOverlay.style.display = 'flex';
+        });
+
+        closeGiantClock.addEventListener('click', () => {
+            giantClockOverlay.style.display = 'none';
+        });
     </script>
 
     <!-- Physics with Matter.js -->
     <canvas id="world"></canvas>
     <script>
-        const { Engine, Render, Runner, World, Bodies, Constraint, Mouse, Bounds, Events, Body } = Matter;
+        const { Engine, Render, Runner, World, Bodies, Constraint, Mouse } = Matter;
 
         const engine = Engine.create();
         const world = engine.world;
@@ -301,32 +264,6 @@
         });
         render.canvas.addEventListener("mousemove", e => { if (hingeConstraint) hingeConstraint.pointA = { x: e.clientX, y: e.clientY }; });
         render.canvas.addEventListener("mouseup", () => { if (hingeConstraint) { World.remove(world, hingeConstraint); hingeConstraint = null; } });
-
-        // Basketball hoop
-        let hoop = null;
-        document.getElementById("basketballBTN").addEventListener("click", () => {
-            if (hoop) World.remove(world, hoop.parts);
-
-            const x = window.innerWidth / 2;
-            const y = window.innerHeight / 2;
-
-            const outer = Bodies.circle(x, y, 60, { isStatic: true, render:{ fillStyle:"black" } });
-            const inner = Bodies.circle(x, y, 40, { isStatic: true, render:{ fillStyle:"green" } });
-
-            hoop = Body.create({ parts:[outer, inner], isStatic:true });
-            World.add(world, hoop);
-
-            Events.on(engine, "afterUpdate", () => {
-                if (hoop && Matter.Bounds.contains(inner.bounds, box.position)) {
-                    score += 1000;
-                    scoreDisplay.textContent = "clicks: " + score;
-                    checkHighestScore();
-                    saveData();
-                    World.remove(world, hoop.parts);
-                    hoop = null;
-                }
-            });
-        });
     </script>
 </body>
 </html>
