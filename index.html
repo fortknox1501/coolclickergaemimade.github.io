@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>THE clicker game!</title>
+    <title>clicker gaem.</title>
     <link rel="icon" type="image/png" href="clickc.jpg">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
     <style>
@@ -34,12 +34,11 @@
             z-index: 5;
         }
     </style>
-    <meta name="google-site-verification" content="o_gfi0Kziy-Y0fIa_wJ_dF0iE0l9rmRLTCARMkHzMvk" />
 </head>
 <body>
     <!-- Home Screen -->
     <div id="homeScreen">
-        <h1 style="font-size:3em; color:rgb(0, 0, 0); margin-bottom:10px;">The clicker game.</h1>
+        <h1 style="font-size:3em; color:rgb(0, 0, 0); margin-bottom:10px;">clicker gaem.</h1>
         <button id="playBtn">play</button>
     </div>
 
@@ -56,16 +55,31 @@
     </div>
 
     <!-- Background music -->
-    <audio id="bgMusic" src="thetrack.mp3" loop></audio>
+    <audio id="gameMusic" src="thetrack.mp3" loop></audio>
+
+    <!-- Volume slider -->
+    <div style="position:fixed; top:10px; right:10px; z-index:200;">
+        <label for="volumeControl" style="color:white;">Volume</label>
+        <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.5">
+    </div>
+
     <script>
-        const bgMusic = document.getElementById('bgMusic');
+        const bgMusic = document.getElementById('gameMusic'); // fixed ID
+        const volumeControl = document.getElementById('volumeControl');
         let musicStarted = false;
 
+        // Start music only after first click
         document.body.addEventListener('click', () => {
             if (!musicStarted) {
+                bgMusic.volume = volumeControl.value; // set initial volume
                 bgMusic.play();
                 musicStarted = true;
             }
+        });
+
+        // Update volume when slider changes
+        volumeControl.addEventListener('input', () => {
+            bgMusic.volume = volumeControl.value;
         });
     </script>
 
@@ -267,4 +281,3 @@
     </script>
 </body>
 </html>
-
