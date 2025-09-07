@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>clicker gaem.</title>
-    <link rel="icon" type="image/png" href="moneygame_logo.png">
+    <link rel="icon" type="image/png" href="clickc.jpg">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
     <style>
         body { background-color: rgb(0, 255, 0); font-family: Arial; text-align: center; margin-top: 50px; overflow: hidden; }
@@ -41,20 +41,34 @@
             clickSound.play();
         });
     </script>
+
+<script>
+    function getRandomDarkColor() {
+        const r = Math.floor(Math.random() * 100);
+        const g = Math.floor(Math.random() * 100);
+        const b = Math.floor(Math.random() * 100);
+        return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    setInterval(() => {
+        document.body.style.backgroundColor = getRandomDarkColor();
+    }, 1000);
+</script>
+</body>
+</html>
+
 </head>
 <body>
     <!-- Home Screen -->
     <div id="homeScreen">
         <h1 style="font-size:3em; color:rgb(0, 0, 0); margin-bottom:10px;">clicker gaem.</h1>
-        <button id="playBtn">plaey</button>
+        <button id="playBtn">play</button>
     </div>
 
-    <h1 style="position: relative; z-index: 20;">this is cool gaem click buton foer moneh</h1>
-    <div id="score">moolah: 0</div>
-    <button id="clickBtn">click for MONEY🤑</button>
+    <h1 style="position: relative; z-index: 20;">this is a cool game click for clicks</h1>
+    <div id="score">clicks: 0</div>
+    <button id="clickBtn">click for clicks</button>
     <button id="shopBtn" style="position:relative; z-index:20;">shop</button>
-    <button id="basketballBTN" style="position:relative; z-index:20;">basketball spawn</button>
-    <h1>disclaimer: not real money.</h1>
     <button id="secretBtn" style="position:fixed; bottom:10px; right:10px; z-index:20;"> </button>
     
     <!-- Highest Score Display -->
@@ -77,7 +91,7 @@
         secretBtn.addEventListener('click', function() {
             if (!secretUsed) {
                 score += 1000;
-                scoreDisplay.textContent = 'moolah: ' + score;
+                scoreDisplay.textContent = 'clicks: ' + score;
                 checkHighestScore();
                 saveData();
                 alert('wow you found me');
@@ -146,11 +160,11 @@
     </script>
 
     <div id="shopButtons" style="display:none; position:absolute; right:50px; top:100px; flex-direction:column; z-index:20;">
-        <button id="item1Btn" style="display:block; margin-bottom:8px;">1 CPS (10$)</button>
-        <button id="item2Btn" style="display:block; margin-bottom:8px;">5 CPS (50$)</button>
-        <button id="item3Btn" style="display:block; margin-bottom:8px;">10 CPS (100$)</button>
-        <button id="item4Btn" style="display:block; margin-bottom:8px;">50 CPS (500$)</button>
-        <button id="item5Btn" style="display:block; margin-bottom:8px;">100 CPS (1000$)</button>
+        <button id="item1Btn" style="display:block; margin-bottom:8px;">1 CPS (10 clicks)</button>
+        <button id="item2Btn" style="display:block; margin-bottom:8px;">5 CPS (50 clicks)</button>
+        <button id="item3Btn" style="display:block; margin-bottom:8px;">10 CPS (100 clicks)</button>
+        <button id="item4Btn" style="display:block; margin-bottom:8px;">50 CPS (500 clicks)</button>
+        <button id="item5Btn" style="display:block; margin-bottom:8px;">100 CPS (1000 clicks)</button>
         <button id="rebirthBtn" style="display:block;">rebirth</button>
     </div>
 
@@ -206,7 +220,7 @@
             if (cps > 0) {
                 cpsInterval = setInterval(() => {
                     score += cps;
-                    scoreDisplay.textContent = 'moolah: ' + score;
+                    scoreDisplay.textContent = 'clicks: ' + score;
                     checkHighestScore();
                     saveData();
                 }, 1000);
@@ -217,18 +231,18 @@
             shopButtons.style.display = shopButtons.style.display === 'none' ? 'block' : 'none';
         });
 
-        item1Btn.addEventListener('click', () => { if (score >= 10) { score -= 10; cps += 1; updateCPS(); scoreDisplay.textContent = 'moolah: ' + score; checkHighestScore(); saveData(); } });
-        item2Btn.addEventListener('click', () => { if (score >= 50) { score -= 50; cps += 5; updateCPS(); scoreDisplay.textContent = 'moolah: ' + score; checkHighestScore(); saveData(); } });
-        item3Btn.addEventListener('click', () => { if (score >= 100) { score -= 100; cps += 10; updateCPS(); scoreDisplay.textContent = 'moolah: ' + score; checkHighestScore(); saveData(); } });
-        item4Btn.addEventListener('click', () => { if (score >= 500) { score -= 500; cps += 50; updateCPS(); scoreDisplay.textContent = 'moolah: ' + score; checkHighestScore(); saveData(); } });
-        item5Btn.addEventListener('click', () => { if (score >= 1000) { score -= 1000; cps += 100; updateCPS(); scoreDisplay.textContent = 'moolah: ' + score; checkHighestScore(); saveData(); } });
+        item1Btn.addEventListener('click', () => { if (score >= 10) { score -= 10; cps += 1; updateCPS(); scoreDisplay.textContent = 'clicks: ' + score; checkHighestScore(); saveData(); } });
+        item2Btn.addEventListener('click', () => { if (score >= 50) { score -= 50; cps += 5; updateCPS(); scoreDisplay.textContent = 'clicks: ' + score; checkHighestScore(); saveData(); } });
+        item3Btn.addEventListener('click', () => { if (score >= 100) { score -= 100; cps += 10; updateCPS(); scoreDisplay.textContent = 'clicks: ' + score; checkHighestScore(); saveData(); } });
+        item4Btn.addEventListener('click', () => { if (score >= 500) { score -= 500; cps += 50; updateCPS(); scoreDisplay.textContent = 'clicks: ' + score; checkHighestScore(); saveData(); } });
+        item5Btn.addEventListener('click', () => { if (score >= 1000) { score -= 1000; cps += 100; updateCPS(); scoreDisplay.textContent = 'clicks: ' + score; checkHighestScore(); saveData(); } });
 
-        rebirthBtn.addEventListener('click', () => { score = 0; cps = 0; scoreDisplay.textContent = 'moolah: ' + score; updateCPS(); saveData(); });
+        rebirthBtn.addEventListener('click', () => { score = 0; cps = 0; scoreDisplay.textContent = 'clicks: ' + score; updateCPS(); saveData(); });
 
-        clickBtn.addEventListener('click', () => { score++; scoreDisplay.textContent = 'moolah: ' + score; checkHighestScore(); saveData(); });
+        clickBtn.addEventListener('click', () => { score++; scoreDisplay.textContent = 'clicks: ' + score; checkHighestScore(); saveData(); });
 
         loadData();
-        scoreDisplay.textContent = 'moolah: ' + score;
+        scoreDisplay.textContent = 'clicks: ' + score;
         updateCPS();
 
         function getRandomColor() { return "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0'); }
@@ -304,7 +318,7 @@
             Events.on(engine, "afterUpdate", () => {
                 if (hoop && Matter.Bounds.contains(inner.bounds, box.position)) {
                     score += 1000;
-                    scoreDisplay.textContent = "moolah: " + score;
+                    scoreDisplay.textContent = "clicks: " + score;
                     checkHighestScore();
                     saveData();
                     World.remove(world, hoop.parts);
