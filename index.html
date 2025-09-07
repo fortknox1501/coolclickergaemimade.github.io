@@ -41,12 +41,12 @@
             clickSound.play();
         });
     </script>
-
 <script>
+    // Random dark background color (never fully black)
     function getRandomDarkColor() {
-        const r = Math.floor(Math.random() * 100);
-        const g = Math.floor(Math.random() * 100);
-        const b = Math.floor(Math.random() * 100);
+        const r = Math.floor(Math.random() * 50) + 50; // 50–100
+        const g = Math.floor(Math.random() * 50) + 50; // 50–100
+        const b = Math.floor(Math.random() * 50) + 50; // 50–100
         return `rgb(${r}, ${g}, ${b})`;
     }
 
@@ -54,6 +54,7 @@
         document.body.style.backgroundColor = getRandomDarkColor();
     }, 1000);
 </script>
+
 </body>
 </html>
 
@@ -67,8 +68,8 @@
 
     <h1 style="position: relative; z-index: 20;">this is a cool game click for clicks</h1>
     <div id="score">clicks: 0</div>
-    <button id="clickBtn">click for clicks</button>
-    <button id="shopBtn" style="position:relative; z-index:20;">shop</button>
+    <button id="clickBtn" style="color:black;">click for clicks</button>
+    <button id="shopBtn" style="position:relative; z-index:20; color: rgb(0, 0, 0); background-color: gold;">shop</button>
     <button id="secretBtn" style="position:fixed; bottom:10px; right:10px; z-index:20;"> </button>
     
     <!-- Highest Score Display -->
