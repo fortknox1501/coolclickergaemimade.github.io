@@ -57,6 +57,11 @@
     <h1>disclaimer: not real money.</h1>
     <button id="secretBtn" style="position:fixed; bottom:10px; right:10px; z-index:20;"> </button>
     
+    <!-- Highest Score Display -->
+    <div id="highestScore" style="position:fixed; bottom:50px; left:10px; font-size:1.2em; color:white; background:rgba(0,0,0,0.5); padding:8px 16px; border-radius:8px; border:2px solid white; z-index:20;">
+        Highest score: 0
+    </div>
+
     <script>
         const homeScreen = document.getElementById('homeScreen');
         const playBtn = document.getElementById('playBtn');
@@ -73,6 +78,7 @@
             if (!secretUsed) {
                 score += 1000;
                 scoreDisplay.textContent = 'moolah: ' + score;
+                checkHighestScore();
                 saveData();
                 alert('wow you found me');
                 secretBtn.style.display = 'none';
@@ -152,17 +158,36 @@
         let score = 0;
         let cps = 0;
         let cpsInterval = null;
+        let highestScore = 0;
 
         function loadData() {
             const savedScore = localStorage.getItem('score');
             const savedCps = localStorage.getItem('cps');
+            const savedHighest = localStorage.getItem('highestScore');
+
             score = savedScore ? parseInt(savedScore) : 0;
             cps = savedCps ? parseInt(savedCps) : 0;
+            highestScore = savedHighest ? parseInt(savedHighest) : 0;
+
+            updateHighestScoreDisplay();
         }
 
         function saveData() {
             localStorage.setItem('score', score);
             localStorage.setItem('cps', cps);
+            localStorage.setItem('highestScore', highestScore);
+        }
+
+        function updateHighestScoreDisplay() {
+            document.getElementById('highestScore').textContent = "Highest score: " + highestScore;
+        }
+
+        function checkHighestScore() {
+            if (score > highestScore) {
+                highestScore = score;
+                updateHighestScoreDisplay();
+                saveData();
+            }
         }
 
         const scoreDisplay = document.getElementById('score');
@@ -182,6 +207,7 @@
                 cpsInterval = setInterval(() => {
                     score += cps;
                     scoreDisplay.textContent = 'moolah: ' + score;
+                    checkHighestScore();
                     saveData();
                 }, 1000);
             }
@@ -191,15 +217,15 @@
             shopButtons.style.display = shopButtons.style.display === 'none' ? 'block' : 'none';
         });
 
-        item1Btn.addEventListener('click', () => { if (score >= 10) { score -= 10; cps += 1; updateCPS(); scoreDisplay.textContent = 'moolah: ' + score; saveData(); } });
-        item2Btn.addEventListener('click', () => { if (score >= 50) { score -= 50; cps += 5; updateCPS(); scoreDisplay.textContent = 'moolah: ' + score; saveData(); } });
-        item3Btn.addEventListener('click', () => { if (score >= 100) { score -= 100; cps += 10; updateCPS(); scoreDisplay.textContent = 'moolah: ' + score; saveData(); } });
-        item4Btn.addEventListener('click', () => { if (score >= 500) { score -= 500; cps += 50; updateCPS(); scoreDisplay.textContent = 'moolah: ' + score; saveData(); } });
-        item5Btn.addEventListener('click', () => { if (score >= 1000) { score -= 1000; cps += 100; updateCPS(); scoreDisplay.textContent = 'moolah: ' + score; saveData(); } });
+        item1Btn.addEventListener('click', () => { if (score >= 10) { score -= 10; cps += 1; updateCPS(); scoreDisplay.textContent = 'moolah: ' + score; checkHighestScore(); saveData(); } });
+        item2Btn.addEventListener('click', () => { if (score >= 50) { score -= 50; cps += 5; updateCPS(); scoreDisplay.textContent = 'moolah: ' + score; checkHighestScore(); saveData(); } });
+        item3Btn.addEventListener('click', () => { if (score >= 100) { score -= 100; cps += 10; updateCPS(); scoreDisplay.textContent = 'moolah: ' + score; checkHighestScore(); saveData(); } });
+        item4Btn.addEventListener('click', () => { if (score >= 500) { score -= 500; cps += 50; updateCPS(); scoreDisplay.textContent = 'moolah: ' + score; checkHighestScore(); saveData(); } });
+        item5Btn.addEventListener('click', () => { if (score >= 1000) { score -= 1000; cps += 100; updateCPS(); scoreDisplay.textContent = 'moolah: ' + score; checkHighestScore(); saveData(); } });
 
         rebirthBtn.addEventListener('click', () => { score = 0; cps = 0; scoreDisplay.textContent = 'moolah: ' + score; updateCPS(); saveData(); });
 
-        clickBtn.addEventListener('click', () => { score++; scoreDisplay.textContent = 'moolah: ' + score; saveData(); });
+        clickBtn.addEventListener('click', () => { score++; scoreDisplay.textContent = 'moolah: ' + score; checkHighestScore(); saveData(); });
 
         loadData();
         scoreDisplay.textContent = 'moolah: ' + score;
@@ -279,6 +305,8 @@
                 if (hoop && Matter.Bounds.contains(inner.bounds, box.position)) {
                     score += 1000;
                     scoreDisplay.textContent = "moolah: " + score;
+                    checkHighestScore();
+                    saveData();
                     World.remove(world, hoop.parts);
                     hoop = null;
                 }
