@@ -46,7 +46,7 @@
     <div id="score">clicks: 0</div>
     <button id="clickBtn" style="color:black;">click for clicks</button>
     <button id="shopBtn" style="position:relative; z-index:20; color: rgb(0, 0, 0); background-color: gold;">shop</button>
-    <button id="secretBtn" style="position:fixed; bottom:10px; right:10px; z-index:20;"> </button>
+    <button id="alertcoolBTN" style="position:relative; z-index:20; color: rgb(0, 0, 0); background-color: lightblue;" onclick="alert('this is a very cool game made by using index.html, etc')">info</button>
     
     <!-- Highest Score Display -->
     <div id="highestScore" style="position:fixed; bottom:50px; left:10px; font-size:1.2em; color:white; background:rgba(0,0,0,0.5); padding:8px 16px; border-radius:8px; border:2px solid white; z-index:20;">
@@ -250,11 +250,15 @@
         const ceiling = Bodies.rectangle(window.innerWidth / 2, -25, window.innerWidth, 50, { isStatic: true });
         World.add(world, [ground, leftWall, rightWall, ceiling]);
 
-        // Orange box
+        // Orange box with black outline
         const box = Bodies.rectangle(window.innerWidth / 2, 100, 30, 30, {
             restitution: 0.4,
             friction: 0.5,
-            render: { fillStyle: "orange" }
+            render: {
+                fillStyle: "orange",
+                strokeStyle: "black", // outline color
+                lineWidth: 3          // outline thickness
+            }
         });
         World.add(world, box);
 
@@ -280,7 +284,3 @@
     </script>
 </body>
 </html>
-
-
-
-
