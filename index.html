@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>THE clicker game</title>
+    <title>clicker game</title>
     <link rel="icon" type="image/png" href="mouse.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
     <style>
@@ -30,7 +30,7 @@
         canvas { 
             position: fixed;
             top: 0; left: 0;
-            width: 100vw; height: 100vh;
+            /* no width/height here to prevent warping */
             z-index: 5;
         }
     </style>
@@ -46,42 +46,14 @@
     <div id="score">clicks: 0</div>
     <button id="clickBtn" style="color:black;">click for clicks</button>
     <button id="shopBtn" style="position:relative; z-index:20; color: rgb(0, 0, 0); background-color: gold;">shop</button>
-    <button id="alertcoolBTN" style="position:relative; z-index:20; color: rgb(0, 0, 0); background-color: lightblue;" onclick="alert('this is a very cool game made by using index.html, etc')">info</button>
-    
+    <button id="goto/infoBTN" style="position:fixed; top:10px; right:10px; z-index:20; color: rgb(0, 0, 0); background-color: lightgrey;" onclick="window.location.href='info.html'">info</button>
+
     <!-- Highest Score Display -->
     <div id="highestScore" style="position:fixed; bottom:50px; left:10px; font-size:1.2em; color:white; background:rgba(0,0,0,0.5); padding:8px 16px; border-radius:8px; border:2px solid white; z-index:20;">
         Highest score: 0
     </div>
 
-    <!-- Background music -->
-    <audio id="gameMusic" src="thetrack.mp3" loop></audio>
-
-    <!-- Volume slider -->
-    <div style="position:fixed; top:10px; right:10px; z-index:200;">
-        <label for="volumeControl" style="color:white;">Volume</label>
-        <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.5">
-    </div>
-
-    <script>
-        const bgMusic = document.getElementById('gameMusic'); // fixed ID
-        const volumeControl = document.getElementById('volumeControl');
-        let musicStarted = false;
-
-        // Start music only after first click
-        document.body.addEventListener('click', () => {
-            if (!musicStarted) {
-                bgMusic.volume = volumeControl.value; // set initial volume
-                bgMusic.play();
-                musicStarted = true;
-            }
-        });
-
-        // Update volume when slider changes
-        volumeControl.addEventListener('input', () => {
-            bgMusic.volume = volumeControl.value;
-        });
-    </script>
-
+    <!-- clock display -->
     <div id="clock" style="position:fixed; bottom:10px; left:10px; font-size:1.2em; color:white; background:rgba(0,0,0,0.5); padding:8px 16px; border-radius:8px; border:2px solid white; cursor:pointer; z-index:20;"></div>
     <div id="giantClockOverlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.85); z-index:2000; align-items:center; justify-content:center;">
         <div style="position:relative; width:100vw; height:100vh; display:flex; align-items:center; justify-content:center;">
@@ -237,17 +209,17 @@
         const render = Render.create({
             canvas: document.getElementById('world'),
             engine: engine,
-            options: { width: window.innerWidth, height: window.innerHeight, wireframes: false, background: "transparent" }
+            options: { wireframes: false, background: "transparent" }
         });
         Render.run(render);
         const runner = Runner.create();
         Runner.run(runner, engine);
 
         // Boundaries
-        const ground = Bodies.rectangle(window.innerWidth / 2, window.innerHeight + 25, window.innerWidth, 50, { isStatic: true });
-        const leftWall = Bodies.rectangle(-25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true });
-        const rightWall = Bodies.rectangle(window.innerWidth + 25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true });
-        const ceiling = Bodies.rectangle(window.innerWidth / 2, -25, window.innerWidth, 50, { isStatic: true });
+        const ground = Bodies.rectangle(0, 0, 0, 0, { isStatic: true });
+        const leftWall = Bodies.rectangle(0, 0, 0, 0, { isStatic: true });
+        const rightWall = Bodies.rectangle(0, 0, 0, 0, { isStatic: true });
+        const ceiling = Bodies.rectangle(0, 0, 0, 0, { isStatic: true });
         World.add(world, [ground, leftWall, rightWall, ceiling]);
 
         // Orange box with black outline
@@ -256,11 +228,36 @@
             friction: 0.5,
             render: {
                 fillStyle: "orange",
-                strokeStyle: "black", // outline color
-                lineWidth: 3          // outline thickness
+                strokeStyle: "black",
+                lineWidth: 3
             }
         });
         World.add(world, box);
+
+        // Resize function
+        function resizeCanvas() {
+            render.canvas.width = window.innerWidth;
+            render.canvas.height = window.innerHeight;
+            render.options.width = window.innerWidth;
+            render.options.height = window.innerHeight;
+
+            // Update boundaries
+            Matter.Body.setPosition(ground, { x: window.innerWidth / 2, y: window.innerHeight + 25 });
+            Matter.Body.setVertices(ground, Matter.Vertices.fromPath(`0 0 ${window.innerWidth} 0 ${window.innerWidth} 50 0 50`));
+
+            Matter.Body.setPosition(leftWall, { x: -25, y: window.innerHeight / 2 });
+            Matter.Body.setVertices(leftWall, Matter.Vertices.fromPath(`0 0 50 0 50 ${window.innerHeight} 0 ${window.innerHeight}`));
+
+            Matter.Body.setPosition(rightWall, { x: window.innerWidth + 25, y: window.innerHeight / 2 });
+            Matter.Body.setVertices(rightWall, Matter.Vertices.fromPath(`0 0 50 0 50 ${window.innerHeight} 0 ${window.innerHeight}`));
+
+            Matter.Body.setPosition(ceiling, { x: window.innerWidth / 2, y: -25 });
+            Matter.Body.setVertices(ceiling, Matter.Vertices.fromPath(`0 0 ${window.innerWidth} 0 ${window.innerWidth} 50 0 50`));
+        }
+
+        // Run resize once and whenever window changes
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
 
         // Mouse hinge
         const mouse = Mouse.create(render.canvas);
