@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<url>https://theclickergame.com</url>
-<url>https://theclickergame.com/info</url>
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://theclickergame.com/</loc>
+  </url>
+  <url>
+    <loc>https://theclickergame.com/info</loc>
+  </url>
+</urlset>
